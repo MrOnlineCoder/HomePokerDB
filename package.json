@@ -1,0 +1,25 @@
+{
+  "name": "homepokerdb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node build/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.9.2",
+    "@types/sqlite3": "^3.1.11",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@types/inquirer": "^9.0.7",
+    "dayjs": "^1.11.10",
+    "inquirer": "^8.2.6",
+    "picocolors": "^1.0.0",
+    "sqlite3": "^5.1.6"
+  }
+}
