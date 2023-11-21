@@ -16,6 +16,7 @@ import crypto from 'crypto';
 import dayjs from 'dayjs';
 import { PokerDeal, PokerMatch, PokerPlayerMatch } from './entities';
 import { PokerHandRank } from './entities';
+import { buildPokerReport } from './report';
 
 export async function addPlayerScene() {
   const { name } = await inquirer.prompt([
@@ -150,6 +151,7 @@ export async function addMatchScene() {
     buyIn: +buyIn,
     chipsCount: +chipsCount,
     endedAt: null,
+    enteredAt: new Date(),
     locationId: +locationId,
     playersCount: +playersCount,
     startedAt: startTime
@@ -191,6 +193,7 @@ export async function addMatchScene() {
       finalChipsCount: 0,
       moneyEarned: 0,
       playerId: +playerId,
+      profit: 0,
     });
 
     console.log(
@@ -360,6 +363,7 @@ export async function addMatchScene() {
 
     pm.finalChipsCount = +finalChipsCount;
     pm.moneyEarned = moneyEarned;
+    pm.profit = pm.moneyEarned - match.buyIn;
   }
 
   console.log(pc.magenta('! ') + pc.white('Match preview:'));
@@ -429,6 +433,28 @@ export async function addMatchScene() {
   );
 }
 
+async function showReport() {
+  const { startDate, endDate } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'startDate',
+      message: 'Start date (DD.MM.YYYY):',
+    },
+    {
+      type: 'input',
+      name: 'endDate',
+      message: 'End date (DD.MM.YYYY):',
+    },
+  ]);
+
+  const report = await buildPokerReport(
+    dayjs(startDate, 'DD.MM.YYYY').startOf('day').toDate(),
+    dayjs(endDate, 'DD.MM.YYYY').endOf('day').toDate()
+  );
+
+  console.log(report);
+}
+
 export async function homeScene() {
   while (true) {
     const { action } = await inquirer.prompt([
@@ -440,6 +466,7 @@ export async function homeScene() {
           { name: 'Add a new player', value: 'add-player' },
           { name: 'Add a new location', value: 'add-location' },
           { name: 'Add a new match', value: 'add-match' },
+          { name: 'Show report', value: 'show-report' },
           { name: 'Exit', value: 'exit' },
         ],
       },
@@ -457,6 +484,10 @@ export async function homeScene() {
 
     if (action == 'add-match') {
       await addMatchScene();
+    }
+
+    if (action == 'show-report') {
+      await showReport();
     }
   }
 }

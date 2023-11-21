@@ -12,6 +12,7 @@ export interface PokerMatch {
   id: string;
   startedAt: Date;
   endedAt: Date | null;
+  enteredAt: Date;
   locationId: number;
   buyIn: number;
   playersCount: number;
@@ -23,6 +24,7 @@ export interface PokerPlayerMatch {
   matchId: string;
   finalChipsCount: number;
   moneyEarned: number;
+  profit: number;
 }
 
 export interface PokerDeal {

@@ -18,6 +18,12 @@ export async function executeDbQuery(
   });
 }
 
+export async function executeDbQuerySingle(query: string, params: any[] = []) {
+  const result = await executeDbQuery(query, params);
+  if (!result.length) return null;
+  return result[0];
+}
+
 export async function initDb() {
   const seedSql = fs.readFileSync('db/init.sql');
 

@@ -7,42 +7,44 @@ import {
   PokerPlayerMatch,
 } from './entities';
 
-function mapRowToPlayer(row: any): PokerPlayer {
+export function mapRowToPlayer(row: any): PokerPlayer {
   return {
     id: row.id,
     name: row.name,
   };
 }
 
-function mapRowToLocation(row: any): PokerLocation {
+export function mapRowToLocation(row: any): PokerLocation {
   return {
     id: row.id,
     name: row.name,
   };
 }
 
-function mapRowToMatch(row: any): PokerMatch {
+export function mapRowToMatch(row: any): PokerMatch {
   return {
     id: row.id,
-    startedAt: row.started_at,
-    endedAt: row.ended_at,
+    startedAt: new Date(+row.started_at),
+    endedAt: row.ended_at ? new Date(+row.ended_at) : null,
     locationId: row.location_id,
     buyIn: row.buy_in,
     playersCount: row.players_count,
     chipsCount: row.chips_count,
+    enteredAt: new Date(+row.entered_at),
   };
 }
 
-function mapRowToPlayerMatch(row: any): PokerPlayerMatch {
+export function mapRowToPlayerMatch(row: any): PokerPlayerMatch {
   return {
     playerId: row.player_id,
     matchId: row.match_id,
-    finalChipsCount: row.final_chips_count,
-    moneyEarned: row.money_earned,
+    finalChipsCount: +row.final_chips_count,
+    moneyEarned: +row.money_earned,
+    profit: +row.profit,
   };
 }
 
-function mapRowToDeal(row: any): PokerDeal {
+export function mapRowToDeal(row: any): PokerDeal {
   return {
     id: row.id,
     num: row.num,
@@ -91,14 +93,16 @@ export async function addLocation(name: string) {
 
 export async function addMatch(match: Partial<PokerMatch>) {
   await executeDbQuery(
-    'INSERT INTO matches (started_at, ended_at, location_id, buy_in, players_count, chips_count) VALUES (?, ?, ?, ?, ?, ?)',
+    'INSERT INTO matches (id, started_at, ended_at, location_id, buy_in, players_count, chips_count, entered_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
+      match.id,
       match.startedAt?.valueOf(),
       match.endedAt?.valueOf(),
       match.locationId,
       match.buyIn,
       match.playersCount,
       match.chipsCount,
+      match.enteredAt?.valueOf(),
     ]
   );
 }
@@ -113,8 +117,9 @@ export async function getMatchesAtDate(date: Date): Promise<PokerMatch[]> {
 
 export async function addDeal(deal: Partial<PokerDeal>) {
   await executeDbQuery(
-    'INSERT INTO deals (num, min_bet, dealer_id, match_id, winner_id, split_winner_id, winning_hand, winning_hand_rank) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO deals (id, num, min_bet, dealer_id, match_id, winner_id, split_winner_id, winning_hand, winning_hand_rank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
+      deal.id,
       deal.num,
       deal.minBet,
       deal.dealerId,

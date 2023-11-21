@@ -12,8 +12,9 @@ CREATE TABLE IF NOT EXISTS matches (
     id TEXT PRIMARY KEY,
     started_at BIGINT,
     ended_at BIGINT,
+    entered_at BIGINT,
     location_id INTEGER REFERENCES locations(id),
-    buy_in INTEGER NOT NULL,
+    buy_in INTEGER,
     players_count INTEGER NOT NULL,
     chips_count INTEGER NOT NULL
 );
@@ -21,8 +22,9 @@ CREATE TABLE IF NOT EXISTS matches (
 CREATE TABLE IF NOT EXISTS players_matches (
     player_id INTEGER REFERENCES players(id),
     match_id TEXT REFERENCES matches(id),
-    final_chips_count INTEGER NOT NULL,
-    money_earned INTEGER NOT NULL,
+    final_chips_count INTEGER,
+    money_earned INTEGER,
+    profit INTEGER,
     PRIMARY KEY (player_id, match_id)
 );
 
