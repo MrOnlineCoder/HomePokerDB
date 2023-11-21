@@ -51,3 +51,30 @@ export enum PokerHandRank {
   StraightFlush = 9,
   RoyalFlush = 10,
 }
+
+export function localizeHandRank(rank: PokerHandRank) {
+  switch (rank) {
+    case PokerHandRank.HighCard:
+      return 'High Card';
+    case PokerHandRank.Pair:
+      return 'Pair';
+    case PokerHandRank.TwoPairs:
+      return 'Two Pairs';
+    case PokerHandRank.ThreeOfAKind:
+      return 'Three of a Kind';
+    case PokerHandRank.Straight:
+      return 'Straight';
+    case PokerHandRank.Flush:
+      return 'Flush';
+    case PokerHandRank.FullHouse:
+      return 'Full House';
+    case PokerHandRank.FourOfAKind:
+      return 'Four of a Kind';
+    case PokerHandRank.StraightFlush:
+      return 'Straight Flush';
+    case PokerHandRank.RoyalFlush:
+      return 'Royal Flush';
+    default:
+      return 'Unknown';
+  }
+}

@@ -14,9 +14,11 @@ import {
 import pc from 'picocolors';
 import crypto from 'crypto';
 import dayjs from 'dayjs';
+import fs from 'fs';
+import childProcess from 'child_process';
 import { PokerDeal, PokerMatch, PokerPlayerMatch } from './entities';
 import { PokerHandRank } from './entities';
-import { buildPokerReport } from './report';
+import { buildPokerReport, renderReportAsHtml } from './report';
 
 export async function addPlayerScene() {
   const { name } = await inquirer.prompt([
@@ -452,7 +454,15 @@ async function showReport() {
     dayjs(endDate, 'DD.MM.YYYY').endOf('day').toDate()
   );
 
-  console.log(report);
+  const html = await renderReportAsHtml(report);
+
+  fs.writeFileSync('/tmp/poker_report.html', html);
+
+  console.log(
+    pc.green('✓ ') + pc.white('Report generated! Opening in browser...')
+  );
+
+  await childProcess.spawn('open', ['/tmp/poker_report.html']);
 }
 
 export async function homeScene() {
