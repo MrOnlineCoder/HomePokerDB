@@ -66,12 +66,15 @@
               🧍‍♂️ Середня кількість гравців в партії:
               <b>{{ averagePlayerCount }}</b>
             </li>
+            {{#if longestMatchDuration}}
             <li>
               ⏱ Найдовша тривалість партії: <b>{{longestMatchDuration}} хв.</b>
             </li>
+            {{/if}} {{#if averageMatchDuration}}
             <li>
               ⏱ Середня тривалість партії: <b>{{averageMatchDuration}} хв.</b>
             </li>
+            {{/if}}
           </ul>
         </div>
       </div>

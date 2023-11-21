@@ -60,7 +60,7 @@ export async function buildPokerReport(
   );
 
   const dealsRows = await executeDbQuery(
-    `SELECT * FROM deals JOIN matches ON deals.match_id = matches.id WHERE matches.started_at BETWEEN ? AND ?`,
+    `SELECT * FROM deals JOIN matches ON deals.match_id = matches.id JOIN players ON deals.dealer_id == players.id WHERE matches.started_at BETWEEN ? AND ?`,
     dateFilterParams
   );
 
@@ -109,14 +109,14 @@ export async function buildPokerReport(
   );
 
   const selfDealWinRows = await executeDbQuery(
-    `select players.name as player_name, count(*) as wins from deals join matches on matches.id = deals.match_id join players on deals.winner_id = players.id where deals.winner_id = deals.dealer_id and matches.started_at between ? and ? group by player_name order by wins desc;`,
+    `select players.id as player_id, players.name as player_name, count(*) as wins from deals join matches on matches.id = deals.match_id join players on deals.winner_id = players.id where deals.winner_id = deals.dealer_id and matches.started_at between ? and ? group by player_id, player_name order by wins desc;`,
     dateFilterParams
   );
 
   return {
     averageMatchDuration: avgMatchDurationRow.duration,
     longestMatchDuration: maxMatchDurationRow.duration,
-    averagePlayerCount: averagePlayersCount,
+    averagePlayerCount: Math.round(averagePlayersCount),
     byLocations: locationsPopularityRows.map((r) => ({
       locationName: r.location_name,
       matchesCount: r.cnt,
@@ -139,10 +139,10 @@ export async function buildPokerReport(
     })),
     byDealerWins: selfDealWinRows.map((r) => ({
       playerName: r.player_name,
-      winsPercent:
-        (r.wins /
-          victoriesRows.find((v) => v.player_name === r.player_name)?.wins) *
-        100,
+      winsPercent: Math.round(
+        (r.wins / dealsRows.filter((v) => v.dealer_id == r.player_id).length) *
+          100
+      ),
     })),
     endDateString: dayjs(endDate).format('DD.MM.YYYY'),
     startDateString: dayjs(startDate).format('DD.MM.YYYY'),

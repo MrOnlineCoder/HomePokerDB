@@ -134,12 +134,13 @@ export async function addDeal(deal: Partial<PokerDeal>) {
 
 export async function addPlayerMatch(playerMatch: Partial<PokerPlayerMatch>) {
   await executeDbQuery(
-    'INSERT INTO players_matches (player_id, match_id, final_chips_count, money_earned) VALUES (?, ?, ?, ?)',
+    'INSERT INTO players_matches (player_id, match_id, final_chips_count, money_earned, profit) VALUES (?, ?, ?, ?, ?)',
     [
       playerMatch.playerId,
       playerMatch.matchId,
       playerMatch.finalChipsCount,
       playerMatch.moneyEarned,
+      playerMatch.profit,
     ]
   );
 }
