@@ -40,6 +40,7 @@ export interface PokerDeal {
 }
 
 export enum PokerHandRank {
+  AllFolded = 0,
   HighCard = 1,
   Pair = 2,
   TwoPairs = 3,
@@ -74,6 +75,8 @@ export function localizeHandRank(rank: PokerHandRank) {
       return 'Straight Flush';
     case PokerHandRank.RoyalFlush:
       return 'Royal Flush';
+    case PokerHandRank.AllFolded:
+      return 'All Folded';
     default:
       return 'Unknown';
   }

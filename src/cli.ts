@@ -101,8 +101,8 @@ export async function addMatchScene() {
             return 'Invalid number!';
           }
 
-          if (+input <= 0) {
-            return 'Buy-in amount should be greater than 0!';
+          if (+input < 0) {
+            return 'Buy-in amount should be greater or equal to 0!';
           }
 
           return true;
@@ -257,6 +257,10 @@ export async function addMatchScene() {
           name: 'winningHandRank',
           message: 'Select winning hand rank:',
           choices: [
+            {
+              name: '* all folded *',
+              value: PokerHandRank.AllFolded,
+            },
             {
               name: 'High card',
               value: PokerHandRank.HighCard,
